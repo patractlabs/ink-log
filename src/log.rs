@@ -28,13 +28,13 @@ pub struct InkLogger {
 #[derive(Debug, PartialEq, Encode, Decode)]
 pub struct LogRecord {
     level: u32,
-    target: String,
-    args: String,
+    target: Vec<u8>,
+    args: Vec<u8>,
 }
 
 // func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md
 // 0xfeffff00
-const FUNC_ID_LOG :u32 = 0xfeffff00;
+const FUNC_ID_LOG: u32 = 0xfeffff00;
 
 impl InkLogger {
     /// Initializes the global logger with a InkLogger instance with
@@ -141,8 +141,8 @@ impl log::Log for InkLogger {
     fn log(&self, record: &log::Record) {
         let input = LogRecord {
             level: record.level() as u32,
-            target: String::from(record.target()),
-            args: ink_prelude::format!("{}", record.args()),
+            target: Vec::from(record.target()),
+            args: Vec::from(ink_prelude::format!("{}", record.args())),
         };
         ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input).unwrap();
     }
