@@ -1,13 +1,9 @@
 #[cfg(test)]
 mod tests {
     #[test]
-    fn it_works() {
-        use crate::log;
+    fn test_ink_log() {
         // ink_env::test::register_chain_extension::<ink_env::DefaultEnvironment, log::LogRecord, log::LogRecord>()
 
-        log::InkLogger::new().init();
-        log::error!(target: "test", "hello world");
-
-        assert_eq!(2 + 2, 4);
+        log::log!(info, target: "test", "hello world");
     }
 }

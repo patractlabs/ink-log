@@ -32,6 +32,24 @@ pub struct LogRecord {
     args: Vec<u8>,
 }
 
+// syntactic sugar for logging.
+#[macro_export]
+macro_rules! log {
+    ($level:tt, target: $target:expr, $patter:expr $(, $values:expr)* $(,)?) => (
+        ink_log::InkLogger::new().init();
+        ink_log::$level!(
+            target: $target,
+		    $patter $(, $values)*
+		);
+    );
+    ($level:tt, $patter:expr $(, $values:expr)* $(,)?) => (
+        ink_log::InkLogger::new().init();
+        ink_log::$level!(
+		    $patter $(, $values)*
+		);
+    )
+}
+
 // func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md
 // 0xfeffff00
 const FUNC_ID_LOG: u32 = 0xfeffff00;

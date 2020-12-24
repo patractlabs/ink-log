@@ -1,6 +1,7 @@
+#[cfg(feature = "std")]
+
 use colored::Colorize;
 
-#[cfg(feature = "std")]
 fn log(level: u32, target: &str, content: &str) {
     let (log_level, log_emoji) = match level {
         1 => (log::Level::Error.to_string().red(), "❌️"),
