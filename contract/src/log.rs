@@ -13,19 +13,9 @@
 // limitations under the License.
 
 //! Ink! logger that prints all messages with a readable output format.
-pub use ink_prelude::{
-    format,
-    string::String,
-    vec::Vec,
-};
-pub use log::{
-    Level,
-    LevelFilter,
-};
-use scale::{
-    Decode,
-    Encode,
-};
+pub use ink_prelude::{format, string::String, vec::Vec};
+pub use log::{Level, LevelFilter};
+use scale::{Decode, Encode};
 
 /// Ink! contract logger that supports on-chain and off-chain print.
 pub struct InkLogger {
@@ -172,8 +162,7 @@ impl log::Log for InkLogger {
             target: Vec::from(record.target()),
             args: Vec::from(ink_prelude::format!("{}", record.args())),
         };
-        ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input)
-            .unwrap();
+        ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input).unwrap();
     }
 
     fn flush(&self) {}
