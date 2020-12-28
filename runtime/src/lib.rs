@@ -31,7 +31,7 @@ impl ChainExtension for LoggerExt {
             // 0xfeffff00-0xfeffffff reserved for pallet-contracts log and print system
             // 0xfeffff00 => ink-log
             0xfeffff00 => {
-                fn dispatch_error(err: str::Utf8Error) -> DispatchError {
+                fn dispatch_error(_err: str::Utf8Error) -> DispatchError {
                     DispatchError::Other("LogRecord parse failed")
                 }
                 // The memory of the vm stores buf in scale-codec
