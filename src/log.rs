@@ -13,9 +13,19 @@
 // limitations under the License.
 
 //! Ink! logger that prints all messages with a readable output format.
-use ink_prelude::{string::String, vec::Vec};
-pub use log::{debug, error, info, trace, warn, Level, LevelFilter};
-use scale::{Decode, Encode};
+pub use ink_prelude::{
+    format,
+    string::String,
+    vec::Vec,
+};
+pub use log::{
+    Level,
+    LevelFilter,
+};
+use scale::{
+    Decode,
+    Encode,
+};
 
 /// Ink! contract logger that supports on-chain and off-chain print.
 pub struct InkLogger {
@@ -27,14 +37,14 @@ pub struct InkLogger {
 
 #[derive(Debug, PartialEq, Encode, Decode)]
 pub struct LogRecord {
-    level: u32,
-    target: Vec<u8>,
-    args: Vec<u8>,
+    pub level: u32,
+    pub target: Vec<u8>,
+    pub args: Vec<u8>,
 }
 
 // syntactic sugar for logging.
 #[macro_export]
-macro_rules! log {
+macro_rules! clog {
     ($level:tt, target: $target:expr, $patter:expr $(, $values:expr)* $(,)?) => (
         ink_log::InkLogger::new().init();
         ink_log::$level!(
@@ -52,7 +62,7 @@ macro_rules! log {
 
 // func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md
 // 0xfeffff00
-const FUNC_ID_LOG: u32 = 0xfeffff00;
+pub const FUNC_ID_LOG: u32 = 0xfeffff00;
 
 impl InkLogger {
     /// Initializes the global logger with a InkLogger instance with
@@ -162,7 +172,8 @@ impl log::Log for InkLogger {
             target: Vec::from(record.target()),
             args: Vec::from(ink_prelude::format!("{}", record.args())),
         };
-        ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input).unwrap();
+        ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input)
+            .unwrap();
     }
 
     fn flush(&self) {}

@@ -5,17 +5,16 @@
 
 ## Example
 
-1. Use custom `log` macro
+1. Use like [rust log](https://github.com/rust-lang/log) macro
 ```
-ink_log::log!(info, target: "flipper-contract", "latest value is: {}", self.value);
-
-ink_log::log!(debug, target: "flipper-contract", "latest value is: {}", self.value);
-```
-
-2. Use [rust log](https://github.com/rust-lang/log) macro
-```
-ink_log::InkLogger::new().init();
 ink_log::info!(target: "flipper-contract", "latest value is: {}", self.value);
 
-ink_log::debug!(target: "flipper-contract", "latest value is: {}", self.value);
+ink_log::debug!("latest value is: {}", self.value);
+```
+
+2. Use custom `clog` macro
+```
+ink_log::clog!(info, target: "flipper-contract", "latest value is: {}", self.value);
+
+ink_log::clog!(debug, "latest value is: {}", self.value);
 ```

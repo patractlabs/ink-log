@@ -15,10 +15,14 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 mod log;
+mod macros;
 mod tests;
 
 #[doc(inline)]
-pub use self::log::*;
+pub use self::{
+    log::*,
+    macros::*,
+};
 
 use cfg_if::cfg_if;
 
