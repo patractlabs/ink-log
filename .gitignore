@@ -1,5 +1,7 @@
+.DS_Store
 .idea
+.vscode
 
-/target
+**/target/
 contract/Cargo.lock
 runtime/Cargo.lock
