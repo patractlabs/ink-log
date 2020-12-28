@@ -3,6 +3,12 @@
 
 [WIP]
 
+## feature `ink-log-chain-extensions`
+Only when the feature is available, the ink-log functions is effective.
+```
+ink_log = { version = "0.1", git = "https://github.com/patractlabs/ink-log", default-features = false, features = ["ink-log-chain-extensions"] }
+```
+
 ## Example
 
 1. Use like [rust log](https://github.com/rust-lang/log) macro

@@ -8,6 +8,26 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+/// Using ink log functions from this module only the feature "ink-log-chain-extensions" is available
+#[cfg(feature = "ink-log-chain-extensions")]
+pub mod logger {
+    pub use super::{log, info, debug, error, trace, warn};
+}
+
+#[cfg(not(feature = "ink-log-chain-extensions"))]
+pub mod logger {
+    #[macro_export]
+    macro_rules! noop {
+		($($arg:tt)+) => {}
+	}
+    pub use noop as log;
+    pub use noop as info;
+    pub use noop as debug;
+    pub use noop as error;
+    pub use noop as trace;
+    pub use noop as warn;
+}
+
 /// The standard logging macro.
 ///
 /// This macro will generically log with the specified `Level` and `format!`

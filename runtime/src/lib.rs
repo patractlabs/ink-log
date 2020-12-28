@@ -63,8 +63,4 @@ impl ChainExtension for LoggerExt {
 
         Ok(RetVal::Converging(0))
     }
-
-    fn enabled() -> bool {
-        true
-    }
 }

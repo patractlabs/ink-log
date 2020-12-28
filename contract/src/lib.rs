@@ -19,7 +19,7 @@ mod macros;
 mod tests;
 
 #[doc(inline)]
-pub use self::{log::*, macros::*};
+pub use self::{log::*, macros::logger::*};
 
 use cfg_if::cfg_if;
 
