@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "contract",
+    "runtime",
+]
+
+[profile.release]
+panic = "abort"

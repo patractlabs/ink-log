@@ -3,5 +3,4 @@
 .vscode
 
 **/target/
-contract/Cargo.lock
-runtime/Cargo.lock
+Cargo.lock
