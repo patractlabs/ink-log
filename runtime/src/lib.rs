@@ -7,7 +7,7 @@ use parity_scale_codec::{Decode, Encode};
 use sp_runtime::DispatchError;
 use sp_std::{str, vec::Vec};
 
-use frame_support::debug::{error, native};
+use frame_support::debug;
 
 /// The chain Extension of logger
 pub struct LoggerExt;
@@ -33,30 +33,30 @@ impl ChainExtension for LoggerExt {
             0xfeffff00 => {
                 // The memory of the vm stores buf in scale-codec
                 let input: LogRecord = env.read_as()?;
-                let target = str::from_utf8(input.target.as_slice()).unwrap();
-                let args = str::from_utf8(input.args.as_slice()).unwrap();
+                let target = str::from_utf8(input.target.as_slice())?;
+                let args = str::from_utf8(input.args.as_slice())?;
 
                 match input.level {
                     1 => {
-                        native::error!(target: target, "❌ {}", args);
+                        debug::error!(target: target, "❌ {}", args);
                     }
                     2 => {
-                        native::warn!(target: target, "⚠️  {}", args);
+                        debug::warn!(target: target, "⚠️  {}", args);
                     }
                     3 => {
-                        native::info!(target: target, "❤️  {}", args);
+                        debug::info!(target: target, "❤️  {}", args);
                     }
                     4 => {
-                        native::debug!(target: target, "📋  {}", args);
+                        debug::debug!(target: target, "📋  {}", args);
                     }
                     5 => {
-                        native::trace!(target: target, "🏷  {}", args);
+                        debug::trace!(target: target, "🏷  {}", args);
                     }
                     _ => (),
                 }
             }
             _ => {
-                error!("call an unregistered `func_id`, func_id:{:}", func_id);
+                debug::error!("call an unregistered `func_id`, func_id:{:}", func_id);
                 return Err(DispatchError::Other("Unimplemented func_id"));
             }
         }
