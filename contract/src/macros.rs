@@ -11,7 +11,7 @@
 /// Using ink log functions from this module only the feature "ink-log-chain-extensions" is available
 #[cfg(feature = "ink-log-chain-extensions")]
 pub mod logger {
-    pub use super::{log, info, debug, error, trace, warn};
+    pub use super::*;
 }
 
 #[cfg(not(feature = "ink-log-chain-extensions"))]
