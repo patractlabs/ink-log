@@ -47,6 +47,7 @@ pub mod logger {
 ///     data.0, data.1, private_data);
 /// # }
 /// ```
+#[cfg(feature = "ink-log-chain-extensions")]
 #[macro_export(local_inner_macros)]
 macro_rules! log {
     (target: $target:expr, $lvl:expr, $message:expr) => ({
@@ -88,6 +89,7 @@ macro_rules! log {
 /// error!(target: "app_events", "App Error: {}, Port: {}", err_info, 22);
 /// # }
 /// ```
+#[cfg(feature = "ink-log-chain-extensions")]
 #[macro_export(local_inner_macros)]
 macro_rules! error {
     (target: $target:expr, $($arg:tt)+) => (
@@ -112,6 +114,7 @@ macro_rules! error {
 /// warn!(target: "input_events", "App received warning: {}", warn_description);
 /// # }
 /// ```
+#[cfg(feature = "ink-log-chain-extensions")]
 #[macro_export(local_inner_macros)]
 macro_rules! warn {
     (target: $target:expr, $($arg:tt)+) => (
@@ -138,6 +141,7 @@ macro_rules! warn {
 ///       conn_info.port, conn_info.speed);
 /// # }
 /// ```
+#[cfg(feature = "ink-log-chain-extensions")]
 #[macro_export(local_inner_macros)]
 macro_rules! info {
     (target: $target:expr, $($arg:tt)+) => (
@@ -163,6 +167,7 @@ macro_rules! info {
 /// debug!(target: "app_events", "New position: x: {}, y: {}", pos.x, pos.y);
 /// # }
 /// ```
+#[cfg(feature = "ink-log-chain-extensions")]
 #[macro_export(local_inner_macros)]
 macro_rules! debug {
     (target: $target:expr, $($arg:tt)+) => (
@@ -190,6 +195,7 @@ macro_rules! debug {
 ///        if pos.y >= 0.0 { "positive" } else { "negative" });
 /// # }
 /// ```
+#[cfg(feature = "ink-log-chain-extensions")]
 #[macro_export(local_inner_macros)]
 macro_rules! trace {
     (target: $target:expr, $($arg:tt)+) => (
