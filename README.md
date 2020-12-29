@@ -11,21 +11,14 @@ ink_log = { version = "0.1", git = "https://github.com/patractlabs/ink-log", def
 
 ## Example
 
-1. Use like [rust log](https://github.com/rust-lang/log) macro
+Use like [rust log](https://github.com/rust-lang/log) macro
 ```
 ink_log::info!(target: "flipper-contract", "latest value is: {}", self.value);
 
 ink_log::debug!("latest value is: {}", self.value);
 ```
 
-2. Use custom `clog` macro
-```
-ink_log::clog!(info, target: "flipper-contract", "latest value is: {}", self.value);
-
-ink_log::clog!(debug, "latest value is: {}", self.value);
-```
-
-output:
+Output:
 ```
 2020-12-28 17:44:30.274   INFO tokio-runtime-worker flipper-contract:/paritytech/ink/examples/flipper/lib.rs:42:❤️  latest value is: false
 ```
