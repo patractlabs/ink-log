@@ -59,8 +59,7 @@ macro_rules! log {
             target: Vec::from(format!("{}:{}:{}", $target, __log_file!(), __log_line!())),
             args: Vec::from($message),
         };
-        ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input)
-            .unwrap();
+        let _ = ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input);
     });
     (target: $target:expr, $lvl:expr, $($arg:tt)+) => ({
         use ink_log::{LogRecord, FUNC_ID_LOG, Vec, format};
@@ -69,8 +68,7 @@ macro_rules! log {
             target: Vec::from(format!("{}:{}:{}", $target, __log_file!(), __log_line!())),
             args: Vec::from(format!("{}", __log_format_args!($($arg)+))),
         };
-        ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input)
-            .unwrap();
+        let _ = ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input);
     });
     ($lvl:expr, $($arg:tt)+) => (log!(target: __log_module_path!(), $lvl, $($arg)+))
 }

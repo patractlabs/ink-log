@@ -12,19 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//! Ink! logger that prints all messages with a readable output format.
 #![cfg_attr(not(feature = "std"), no_std)]
 
-mod log;
 mod macros;
 mod tests;
 
-#[doc(inline)]
-pub use self::{log::*, macros::logger::*};
-
 use cfg_if::cfg_if;
+use scale::{Decode, Encode};
+pub use ink_prelude::{vec::Vec, format};
+pub use log::Level;
+#[doc(inline)]
+pub use self::macros::logger::*;
 
 cfg_if! {
     if #[cfg(feature = "std")] {
         pub mod off_chain;
     }
 }
+
+#[derive(Debug, PartialEq, Encode, Decode)]
+pub struct LogRecord {
+    pub level: u32,
+    pub target: Vec<u8>,
+    pub args: Vec<u8>,
+}
+
+// func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md
+// 0xfeffff00
+pub const FUNC_ID_LOG: u32 = 0xfeffff00;
