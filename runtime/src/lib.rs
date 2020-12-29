@@ -1,19 +1,19 @@
 //! Logger Chain Extension
 #![cfg_attr(not(feature = "std"), no_std)]
+extern crate alloc;
+
 use pallet_contracts::chain_extension::{
     ChainExtension, Environment, Ext, InitState, RetVal, SysConfig, UncheckedFrom,
 };
 use parity_scale_codec::{Decode, Encode};
-use sp_runtime::DispatchError;
-use sp_std::{str, vec::Vec};
+use core::str;
+use alloc::vec::Vec;
 
-use frame_support::debug;
+use frame_support::{debug, dispatch::DispatchError};
 
 /// The chain Extension of logger
-pub struct LoggerExt;
-
 #[derive(Debug, PartialEq, Encode, Decode)]
-pub struct LogRecord {
+pub struct LoggerExt {
     pub level: u32,
     pub target: Vec<u8>,
     pub args: Vec<u8>,
@@ -35,7 +35,7 @@ impl ChainExtension for LoggerExt {
                     DispatchError::Other("LogRecord parse failed")
                 }
                 // The memory of the vm stores buf in scale-codec
-                let input: LogRecord = env.read_as()?;
+                let input: Self = env.read_as()?;
                 let target = str::from_utf8(input.target.as_slice()).map_err(dispatch_error)?;
                 let args = str::from_utf8(input.args.as_slice()).map_err(dispatch_error)?;
 
