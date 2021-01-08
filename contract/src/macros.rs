@@ -18,8 +18,8 @@ pub mod logger {
 pub mod logger {
     #[macro_export]
     macro_rules! noop {
-		($($arg:tt)+) => {}
-	}
+        ($($arg:tt)+) => {};
+    }
     pub use noop as log;
     pub use noop as info;
     pub use noop as debug;
