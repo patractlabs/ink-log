@@ -4,7 +4,6 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use codec::{Decode, Encode};
-use core::str;
 
 pub use pallet_contracts::chain_extension::RetVal;
 use pallet_contracts::chain_extension::{
@@ -27,25 +26,18 @@ impl ChainExtension for LoggerExt {
     where
         <E::T as SysConfig>::AccountId: UncheckedFrom<<E::T as SysConfig>::Hash> + AsRef<[u8]>,
     {
-        logger_ext_impl!(func_id, env);
+        logger_ext!(func_id, env);
 
         Ok(RetVal::Converging(0))
     }
 }
 
-#[macro_export(local_inner_macros)]
+#[macro_export]
 macro_rules! logger_ext {
     ($func_id:expr, $env:expr) => {
         use core::str;
         use $crate::{debug, LoggerExt};
 
-        logger_ext_impl!($func_id, $env);
-    };
-}
-
-#[macro_export(local_inner_macros)]
-macro_rules! logger_ext_impl {
-    ($func_id:expr, $env:expr) => {
         let mut env = $env.buf_in_buf_out();
 
         // func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md

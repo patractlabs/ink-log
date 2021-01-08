@@ -1,5 +1,5 @@
 [package]
-name = "runtime_log"
+name = "runtime-log"
 version = "0.1.0"
 authors = ["zhangtailin <tailinzhang1993@gmail.com>"]
 edition = "2018"
