@@ -37,7 +37,7 @@ impl ChainExtension for LoggerExt {
 macro_rules! logger_ext {
     ($func_id:expr, $env:expr) => {
         use core::str;
-        use runtime_log::{ debug, LoggerExt };
+        use $crate::{debug, LoggerExt};
 
         logger_ext_impl!($func_id, $env);
     };

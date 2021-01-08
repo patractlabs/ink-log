@@ -20,16 +20,12 @@ mod tests;
 
 #[doc(inline)]
 pub use self::macros::logger::*;
-use cfg_if::cfg_if;
 pub use ink_prelude::{format, vec::Vec};
 pub use log::Level;
 use scale::{Decode, Encode};
 
-cfg_if! {
-    if #[cfg(feature = "std")] {
-        pub mod off_chain;
-    }
-}
+#[cfg(feature = "std")]
+pub mod off_chain;
 
 #[derive(Debug, PartialEq, Encode, Decode)]
 pub struct LogRecord {
