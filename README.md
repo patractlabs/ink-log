@@ -38,7 +38,7 @@ impl ChainExtension for CustomExt {
 	}
 }
 ```
-2. If you don't have any CustomExt`, use `runtime_log::LoggerExt` to set `ChainExtension`.
+2. If you don't have any `CustomExt`, use `runtime_log::LoggerExt` to set `ChainExtension`.
 ```rust
 impl pallet_contracts::Config for Runtime {
     // ...... 
