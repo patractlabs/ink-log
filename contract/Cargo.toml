@@ -12,7 +12,6 @@ ink_prelude = { version = "3.0.0-rc2", default-features = false }
 
 scale = { package = "parity-scale-codec", version = "1.3", default-features = false, features = ["derive", "full"] }
 log = { version = "0.4" }
-cfg-if = "1.0"
 
 # Log print for the off-chain environment.
 chrono = { version = "0.4", optional = true }

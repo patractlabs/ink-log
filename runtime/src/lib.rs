@@ -2,14 +2,16 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 extern crate alloc;
 
-use pallet_contracts::chain_extension::{
-    ChainExtension, Environment, Ext, InitState, RetVal, SysConfig, UncheckedFrom,
-};
-use parity_scale_codec::{Decode, Encode};
-use core::str;
 use alloc::vec::Vec;
+use codec::{Decode, Encode};
 
-use frame_support::{debug, dispatch::DispatchError};
+pub use pallet_contracts::chain_extension::RetVal;
+use pallet_contracts::chain_extension::{
+    ChainExtension, Environment, Ext, InitState, SysConfig, UncheckedFrom,
+};
+
+pub use frame_support::debug;
+use frame_support::dispatch::DispatchError;
 
 /// The chain Extension of logger
 #[derive(Debug, PartialEq, Encode, Decode)]
@@ -24,10 +26,22 @@ impl ChainExtension for LoggerExt {
     where
         <E::T as SysConfig>::AccountId: UncheckedFrom<<E::T as SysConfig>::Hash> + AsRef<[u8]>,
     {
-        let mut env = env.buf_in_buf_out();
+        logger_ext!(func_id, env);
+
+        Ok(RetVal::Converging(0))
+    }
+}
+
+#[macro_export]
+macro_rules! logger_ext {
+    ($func_id:expr, $env:expr) => {
+        use core::str;
+        use $crate::{debug, LoggerExt};
+
+        let mut env = $env.buf_in_buf_out();
 
         // func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md
-        match func_id {
+        match $func_id {
             // 0xfeffff00-0xfeffffff reserved for pallet-contracts log and print system
             // 0xfeffff00 => ink-log
             0xfeffff00 => {
@@ -35,7 +49,7 @@ impl ChainExtension for LoggerExt {
                     DispatchError::Other("LogRecord parse failed")
                 }
                 // The memory of the vm stores buf in scale-codec
-                let input: Self = env.read_as()?;
+                let input: LoggerExt = env.read_as()?;
                 let target = str::from_utf8(input.target.as_slice()).map_err(dispatch_error)?;
                 let args = str::from_utf8(input.args.as_slice()).map_err(dispatch_error)?;
 
@@ -59,11 +73,9 @@ impl ChainExtension for LoggerExt {
                 }
             }
             _ => {
-                debug::error!("call an unregistered `func_id`, func_id:{:}", func_id);
+                debug::error!("call an unregistered `func_id`, func_id:{:}", $func_id);
                 return Err(DispatchError::Other("Unimplemented func_id"));
             }
         }
-
-        Ok(RetVal::Converging(0))
-    }
+    };
 }
