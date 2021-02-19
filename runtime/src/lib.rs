@@ -21,9 +21,10 @@ pub struct LoggerExt {
     pub args: Vec<u8>,
 }
 
-impl ChainExtension for LoggerExt {
+impl<C: pallet_contracts::Config> ChainExtension<C> for LoggerExt {
     fn call<E: Ext>(func_id: u32, env: Environment<E, InitState>) -> Result<RetVal, DispatchError>
     where
+        E: Ext<T = C>,
         <E::T as SysConfig>::AccountId: UncheckedFrom<<E::T as SysConfig>::Hash> + AsRef<[u8]>,
     {
         logger_ext!(func_id, env);
