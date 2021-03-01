@@ -17,6 +17,9 @@ log = { version = "0.4" }
 chrono = { version = "0.4", optional = true }
 colored = { version = "^1.6", optional = true }
 
+# patch
+funty = "=1.1"
+
 [features]
 default = ["std"]
 std = [
