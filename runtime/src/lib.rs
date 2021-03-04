@@ -10,8 +10,10 @@ use pallet_contracts::chain_extension::{
     ChainExtension, Environment, Ext, InitState, SysConfig, UncheckedFrom,
 };
 
-pub use frame_support::debug;
-use frame_support::dispatch::DispatchError;
+use frame_support::{
+    dispatch::DispatchError,
+    log::{debug, error, info, trace, warn},
+};
 
 /// The chain Extension of logger
 #[derive(Debug, PartialEq, Encode, Decode)]
@@ -37,7 +39,7 @@ impl<C: pallet_contracts::Config> ChainExtension<C> for LoggerExt {
 macro_rules! logger_ext {
     ($func_id:expr, $env:expr) => {
         use core::str;
-        use $crate::{debug, LoggerExt};
+        use $crate::LoggerExt;
 
         let mut env = $env.buf_in_buf_out();
 
@@ -56,25 +58,25 @@ macro_rules! logger_ext {
 
                 match input.level {
                     1 => {
-                        debug::error!(target: target, "❌ {}", args);
+                        error!(target: target, "❌ {}", args);
                     }
                     2 => {
-                        debug::warn!(target: target, "⚠️  {}", args);
+                        warn!(target: target, "⚠️  {}", args);
                     }
                     3 => {
-                        debug::info!(target: target, "❤️  {}", args);
+                        info!(target: target, "❤️  {}", args);
                     }
                     4 => {
-                        debug::debug!(target: target, "📋  {}", args);
+                        debug!(target: target, "📋  {}", args);
                     }
                     5 => {
-                        debug::trace!(target: target, "🏷  {}", args);
+                        trace!(target: target, "🏷  {}", args);
                     }
                     _ => (),
                 }
             }
             _ => {
-                debug::error!("call an unregistered `func_id`, func_id:{:}", $func_id);
+                error!("call an unregistered `func_id`, func_id:{:}", $func_id);
                 return Err(DispatchError::Other("Unimplemented func_id"));
             }
         }
