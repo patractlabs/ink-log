@@ -10,10 +10,8 @@ use pallet_contracts::chain_extension::{
     ChainExtension, Environment, Ext, InitState, SysConfig, UncheckedFrom,
 };
 
-use frame_support::{
-    dispatch::DispatchError,
-    log::{debug, error, info, trace, warn},
-};
+pub use frame_support::debug;
+pub use frame_support::dispatch::DispatchError;
 
 /// The chain Extension of logger
 #[derive(Debug, PartialEq, Encode, Decode)]
@@ -39,7 +37,7 @@ impl<C: pallet_contracts::Config> ChainExtension<C> for LoggerExt {
 macro_rules! logger_ext {
     ($func_id:expr, $env:expr) => {
         use core::str;
-        use $crate::LoggerExt;
+        use $crate::{debug, DispatchError, LoggerExt};
 
         let mut env = $env.buf_in_buf_out();
 
@@ -58,25 +56,25 @@ macro_rules! logger_ext {
 
                 match input.level {
                     1 => {
-                        error!(target: target, "❌ {}", args);
+                        debug::error!(target: target, "❌ {}", args);
                     }
                     2 => {
-                        warn!(target: target, "⚠️  {}", args);
+                        debug::warn!(target: target, "⚠️  {}", args);
                     }
                     3 => {
-                        info!(target: target, "❤️  {}", args);
+                        debug::info!(target: target, "❤️  {}", args);
                     }
                     4 => {
-                        debug!(target: target, "📋  {}", args);
+                        debug::debug!(target: target, "📋  {}", args);
                     }
                     5 => {
-                        trace!(target: target, "🏷  {}", args);
+                        debug::trace!(target: target, "🏷  {}", args);
                     }
                     _ => (),
                 }
             }
             _ => {
-                error!("call an unregistered `func_id`, func_id:{:}", $func_id);
+                debug::error!("call an unregistered `func_id`, func_id:{:}", $func_id);
                 return Err(DispatchError::Other("Unimplemented func_id"));
             }
         }
