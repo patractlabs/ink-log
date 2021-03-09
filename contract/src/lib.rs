@@ -18,22 +18,57 @@
 mod macros;
 mod tests;
 
+#[cfg(feature = "std")]
+pub mod off_chain;
+
 #[doc(inline)]
 pub use self::macros::logger::*;
 pub use ink_prelude::{format, vec::Vec};
 pub use log::Level;
-use scale::{Decode, Encode};
 
-#[cfg(feature = "std")]
-pub mod off_chain;
+use ink_env::{DefaultEnvironment, Environment};
+use ink_lang as ink;
 
-#[derive(Debug, PartialEq, Encode, Decode)]
+pub enum CustomEnvironment {}
+
+#[derive(scale::Encode, scale::Decode)]
+#[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
 pub struct LogRecord {
     pub level: u32,
     pub target: Vec<u8>,
     pub args: Vec<u8>,
 }
 
-// func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md
-// 0xfeffff00
-pub const FUNC_ID_LOG: u32 = 0xfeffff00;
+#[derive(scale::Encode, scale::Decode)]
+#[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
+pub enum ErrorCode {}
+
+impl ink_env::chain_extension::FromStatusCode for ErrorCode {
+    fn from_status_code(status_code: u32) -> Result<(), Self> {
+        match status_code {
+            0 => Ok(()),
+            _ => panic!("encountered unknown status code"),
+        }
+    }
+}
+
+#[ink::chain_extension]
+pub trait LogExt {
+    type ErrorCode = ErrorCode;
+
+    // func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md
+    #[ink(extension = 0xfeffff00, handle_status = false, returns_result = false)]
+    fn log(input: LogRecord);
+}
+
+impl Environment for CustomEnvironment {
+    const MAX_EVENT_TOPICS: usize = <DefaultEnvironment as Environment>::MAX_EVENT_TOPICS;
+
+    type AccountId = <DefaultEnvironment as Environment>::AccountId;
+    type Balance = <DefaultEnvironment as Environment>::Balance;
+    type Hash = <DefaultEnvironment as Environment>::Hash;
+    type Timestamp = <DefaultEnvironment as Environment>::Timestamp;
+    type BlockNumber = <DefaultEnvironment as Environment>::BlockNumber;
+
+    type ChainExtension = LogExt;
+}

@@ -51,7 +51,7 @@ pub mod logger {
 #[macro_export(local_inner_macros)]
 macro_rules! log {
     (target: $target:expr, $lvl:expr, $message:expr) => ({
-        use ink_log::{LogRecord, FUNC_ID_LOG, Vec, format};
+        use ink_log::{LogRecord, Vec, format};
         // ensure that $message is a valid format string literal
         let _ = __log_format_args!($message);
         let input = LogRecord {
@@ -59,16 +59,16 @@ macro_rules! log {
             target: Vec::from(format!("{}:{}:{}", $target, __log_file!(), __log_line!())),
             args: Vec::from($message),
         };
-        let _ = ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input);
+        Self::env().extension().log(input);
     });
     (target: $target:expr, $lvl:expr, $($arg:tt)+) => ({
-        use ink_log::{LogRecord, FUNC_ID_LOG, Vec, format};
+        use ink_log::{LogRecord, Vec, format};
         let input = LogRecord {
             level: $lvl as u32,
             target: Vec::from(format!("{}:{}:{}", $target, __log_file!(), __log_line!())),
             args: Vec::from(format!("{}", __log_format_args!($($arg)+))),
         };
-        let _ = ink_env::call_chain_extension::<LogRecord, LogRecord>(FUNC_ID_LOG, &input);
+        Self::env().extension().log(input);
     });
     ($lvl:expr, $($arg:tt)+) => (log!(target: __log_module_path!(), $lvl, $($arg)+))
 }
