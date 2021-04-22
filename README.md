@@ -1,8 +1,6 @@
 # Ink-log 
 Ink-log provides pretty log printing for [Ink!](https://github.com/paritytech/ink) smart contract，it's implmented by `ChainExtension`.
 
-[WIP]
-
 ## Usage
 ## 1. Contract Pallet In Substrate Runtime
 
@@ -51,7 +49,7 @@ impl pallet_contracts::Config for Runtime {
 ### dependencies
 Add this to your contratc `Cargo.toml`:
 ```
-ink_log = { version = "0.1", git = "https://github.com/patractlabs/ink-log", default-features = false, features = ["ink-log-chain-extensions"] }
+ink_log = { git = "https://github.com/patractlabs/ink-log", branch = "master", default-features = false, features = ["ink-log-chain-extensions"] }
 
 [features]
 std = [
@@ -65,12 +63,42 @@ Notes: must add feature `ink-log-chain-extensions` feature, only when the featur
 
 Use like [rust log](https://github.com/rust-lang/log) macro
 ```rust
-ink_log::info!(target: "flipper-contract", "latest value is: {}", self.value);
+#![cfg_attr(not(feature = "std"), no_std)]
 
-ink_log::debug!("latest value is: {}", self.value);
+use ink_lang as ink;
+use ink_log::CustomEnvironment;
+
+#[ink::contract(env = crate::CustomEnvironment)]
+pub mod flipper {
+    #[ink(storage)]
+    pub struct Flipper {
+        value: bool,
+    }
+
+    impl Flipper {
+        #[ink(constructor)]
+        pub fn new(init_value: bool) -> Self {
+            Self { value: init_value }
+        }
+
+        #[ink(message)]
+        pub fn flip(&mut self) {
+            ink_log::info!(target: "flipper-contract", "latest value is: {}", self.value);
+            
+            self.value = !self.value;
+        }
+    }
+}
 ```
 
 Output:
 ```
 2020-12-28 17:44:30.274   INFO tokio-runtime-worker flipper-contract:/paritytech/ink/examples/flipper/lib.rs:42:❤️  latest value is: false
 ```
+
+## 3. log extension func_id
+```
+0xfeffff00
+```
+other func_id refer to https://github.com/patractlabs/PIPs/blob/main/PIPs/pip-100.md
+
