@@ -66,9 +66,8 @@ Use like [rust log](https://github.com/rust-lang/log) macro
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use ink_lang as ink;
-use ink_log::CustomEnvironment;
 
-#[ink::contract(env = crate::CustomEnvironment)]
+#[ink::contract(env = ink_log::CustomEnvironment)]
 pub mod flipper {
     #[ink(storage)]
     pub struct Flipper {
