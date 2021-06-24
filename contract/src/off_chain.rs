@@ -19,5 +19,5 @@ pub fn log(level: u32, target: &str, content: &str) {
         log_emoji,
         content
     );
-    ink_env::debug_println(&message)
+    ink_env::debug_println!("{}", &message)
 }
