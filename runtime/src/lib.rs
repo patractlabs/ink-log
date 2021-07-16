@@ -52,7 +52,7 @@ macro_rules! logger_ext {
                     DispatchError::Other("LogRecord parse failed")
                 }
                 // The memory of the vm stores buf in scale-codec
-                let input: LoggerExt = env.read_as()?;
+                let input: LoggerExt = env.read_as_unbounded(env.in_len())?;
                 let target = str::from_utf8(input.target.as_slice()).map_err(dispatch_error)?;
                 let args = str::from_utf8(input.args.as_slice()).map_err(dispatch_error)?;
 
