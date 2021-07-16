@@ -8,10 +8,11 @@ edition = "2018"
 
 [dependencies]
 codec = { package = "parity-scale-codec", version = "2.0.1", features = ["derive"], default-features = false }
+log = { version = "0.4.14", default-features = false }
 
 frame-support = { version = "3.0.0", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
 
-pallet-contracts = { version = "3.0.0", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false }
+pallet-contracts = { version = "3.0.0", git = "https://github.com/paritytech/substrate", branch = "master", default-features = false, optional = true }
 
 # patch
 funty = "=1.1"
@@ -21,5 +22,6 @@ default = ["std"]
 std = [
     "codec/std",
     "frame-support/std",
-    "pallet-contracts/std",
+    "log/std",
 ]
+chain-extension = [ "pallet-contracts" ]
